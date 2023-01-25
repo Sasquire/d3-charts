@@ -94,7 +94,10 @@ class PieChart extends Chart {
 	draw (data) {
 		const {bulk, other} = this.#split_data(data);
 
-		const arcs = d3.pie().value(d => d.count)(bulk);
+		const arcs = d3.pie()
+			.value(d => d.count)
+			.sort(null)
+			(bulk);
 		const arcs_with_images = arcs.filter(e => e.data.image.href !== null);
 
 		this.#draw_title();
@@ -112,7 +115,8 @@ class PieChart extends Chart {
 				...e,
 				proportion: e.count / total_count,
 				image: assign_defaults(e.image, Image.default_image)
-			}));
+			}))
+			.sort((a, b) =>  b.count - a.count);
 		
 		const threshold = this.options.other.proportion_threshold;
 		const above = images_with_proportion.filter(e => e.proportion > threshold);
