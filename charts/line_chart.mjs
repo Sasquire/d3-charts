@@ -1,6 +1,6 @@
 import * as d3 from 'd3';
 
-import { assign_defaults, duplicate_object } from './../utils/object_utils.mjs';
+import { assign_defaults } from './../utils/object_utils.mjs';
 
 import Font from './../components/font.mjs';
 import Legend from './../components/legend.mjs';
@@ -22,9 +22,7 @@ class LineChart extends Chart {
 			text: null,
 			font: Font.default_font
 		},
-		x_scale: duplicate_object(Scale.default_scale, {
-			type: 'time'
-		}),
+		x_scale: Scale.default_scale,
 		y_scale: Scale.default_scale,
 		color: d3.schemeCategory10,
 		legend: Legend.default_legend
