@@ -27,6 +27,13 @@ class Scale {
 			max = options.max
 		}
 
+		if ((options.type === 'log' || options.type === 'symlog') && min <= 0) {
+			throw new Error('bad minimum value with log scale');
+		}
+		if (options.type === 'sqrt' && min < 0) {
+			throw new Error('bad minimum value with sqrt scale');
+		}
+
 		const type = {
 			'linear': scaleLinear,
 			'pow': scalePow,
