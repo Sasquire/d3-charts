@@ -1,9 +1,10 @@
 import * as d3 from 'd3';
 
-import { assign_defaults } from './../utils/object_utils.mjs';
+import { assign_defaults, duplicate_object } from './../utils/object_utils.mjs';
 
 import Font from './../components/font.mjs';
 import Legend from './../components/legend.mjs';
+import Scale from './../components/scale.mjs';
 import Chart from './default_chart.mjs';
 
 class LineChart extends Chart {
@@ -21,6 +22,10 @@ class LineChart extends Chart {
 			text: null,
 			font: Font.default_font
 		},
+		x_scale: duplicate_object(Scale.default_scale, {
+			type: 'time'
+		}),
+		y_scale: Scale.default_scale,
 		color: d3.schemeCategory10,
 		legend: Legend.default_legend
 	}
@@ -171,14 +176,12 @@ class LineChart extends Chart {
 	}
 
 	#draw_plot (data, data_by_keys) {
-		// TODO x_min, x_max, y_mix, y_max
-		// TODO how to allow user to change the scale (timescale, linear, log)
-		const x_transform = d3.scaleTime()
-			.domain(d3.extent(data.map(e => e.x)))
+		const x_values = data.map(e => e.x);
+		const y_values = data.map(e => e.y);
+		const x_transform = Scale.to_d3(this.options.x_scale, x_values)
 			.range([this.options.margins.left, this.options.width]);
 
-		const y_transform = d3.scaleLinear()
-			.domain(d3.extent(data.map(e => e.y)))
+		const y_transform = Scale.to_d3(this.options.y_scale, y_values)
 			.range([this.options.height + this.options.margins.bottom, this.options.margins.bottom]);
 
 		const line_function = d3.line()
