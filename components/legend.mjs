@@ -8,8 +8,8 @@ class Legend {
 	static default_legend = {
 		font: Font.default_font,
 		spacing: 4,
-		x: 150,
-		y: 150
+		x: 100,
+		y: 75
 	} 
 
 	// TODO I don't think this is the best way to do a legend
